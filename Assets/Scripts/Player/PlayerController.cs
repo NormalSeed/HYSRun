@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         MoveInput();
+        if (Input.GetKeyDown(KeyCode.Space)) Jump();
     }
 
     private void FixedUpdate()
@@ -32,12 +33,18 @@ public class PlayerController : MonoBehaviour
 
     void PlayerMove()
     {
-        rb.velocity = moveVelocity;
+        rb.velocity = new Vector2(moveVelocity.x, rb.velocity.y);
     }
 
     void MoveInput()
     {
         float x = Input.GetAxisRaw("Horizontal");
         moveVelocity = new Vector2(x, 0).normalized * model.MoveSpd;
+    }
+
+    void Jump()
+    {
+        Debug.Log("มกวมวิ");
+        rb.AddForce(Vector2.up * model.JumpPower * rb.gravityScale, ForceMode2D.Impulse); 
     }
 }
