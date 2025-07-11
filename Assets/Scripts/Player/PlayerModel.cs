@@ -9,5 +9,4 @@ public class PlayerModel : MonoBehaviour
     [field: SerializeField] public float MoveSpd { get; set; } = 5;
     [field: SerializeField] public float JumpPower { get; set; } = 3.5f;
     public ObservableProperty<int> CurHP { get; private set; } = new();
-    public ObservableProperty<float> CurSpd { get; private set; } = new();
 }
