@@ -92,21 +92,3 @@ public class SequenceNode : INode
         return INode.STATE.Success;
     }
 }
-
-public class RandomSelectorNode : INode
-{
-    List<INode> children;
-
-    public RandomSelectorNode() { children = new List<INode>(); }
-
-    public void Add(INode node) { children.Add(node); }
-
-    public INode.STATE Evaluate()
-    {
-        if (children.Count <= 0)
-            return INode.STATE.Failure;
-        int index = UnityEngine.Random.Range(0, children.Count);
-
-        return children[index].Evaluate();
-    }
-}

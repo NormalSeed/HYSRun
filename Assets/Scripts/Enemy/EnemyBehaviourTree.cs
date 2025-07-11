@@ -7,7 +7,7 @@ public class EnemyBehaviourTree : MonoBehaviour
     SelectorNode rootNode;
     SequenceNode attackSequence;
     SequenceNode detectSequence;
-    RandomSelectorNode idleRandom;
+    ActionNode idleAction;
 
     private EnemyController controller;
 
@@ -28,16 +28,14 @@ public class EnemyBehaviourTree : MonoBehaviour
         detectSequence.Add(new ActionNode(CheckInDetectRange));
         detectSequence.Add(new ActionNode(Trace));
 
-        // 대기 랜덤셀렉터 노드 생성
-        idleRandom = new RandomSelectorNode();
-        idleRandom.Add(new ActionNode(Idle));
-        idleRandom.Add(new ActionNode(Patrol));
+        // 대기 액션 노드 생성
+        idleAction = new ActionNode(Idle);
 
         // 루트 노드 생성
         rootNode = new SelectorNode();
         rootNode.Add(attackSequence);
         rootNode.Add(detectSequence);
-        rootNode.Add(idleRandom);
+        rootNode.Add(idleAction);
     }
 
     private void Update()
@@ -55,7 +53,7 @@ public class EnemyBehaviourTree : MonoBehaviour
 
     protected virtual INode.STATE Attack()
     {
-        Debug.Log("공격중");
+        controller.curState = EnemyState.Attack;
         controller.Attack();
         return INode.STATE.Running;
     }
@@ -70,18 +68,13 @@ public class EnemyBehaviourTree : MonoBehaviour
 
     protected virtual INode.STATE Trace()
     {
-        Debug.Log("추적중");
-        controller.SetTargetDir();
+        controller.curState = EnemyState.Trace;
         return INode.STATE.Running;
     }
 
     protected virtual INode.STATE Idle()
     {
-        return INode.STATE.Running;
-    }
-
-    protected virtual INode.STATE Patrol()
-    {
+        controller.curState = EnemyState.Patrol;
         return INode.STATE.Running;
     }
 }

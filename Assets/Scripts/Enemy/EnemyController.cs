@@ -5,14 +5,17 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    private EnemyModel model;
-    private EnemyView view;
+    protected EnemyModel model;
+    protected EnemyView view;
 
     public bool isInAttackRange;
     public bool isInDetectRange;
-    private bool isTracing;
+    public EnemyState curState;
 
-    private Transform target;
+    protected GameObject player;
+    protected Vector2 targetPos;
+    protected int patrolDir;
+    protected float changePatrolDirTimer;
 
     private void Awake() => Init();
 
@@ -22,11 +25,35 @@ public class EnemyController : MonoBehaviour
         view = GetComponent<EnemyView>();
     }
 
+    protected virtual void Start()
+    {
+        player = GameObject.FindWithTag("Player");
+        curState = EnemyState.Idle;
+    }
+
+    private void Update()
+    {
+        if (Vector2.Distance(transform.position, player.transform.position) <= model.AttackRange)
+            isInAttackRange = true;
+        else
+            isInAttackRange = false;
+
+        if (Vector2.Distance(transform.position, player.transform.position) <= model.DetectRange && Vector2.Distance(transform.position, player.transform.position) > model.AttackRange)
+            isInDetectRange = true;
+        else
+            isInDetectRange = false;
+    }
+
     protected virtual void FixedUpdate()
     {
-        if (isTracing)
+        switch (curState)
         {
-            Trace();
+            case EnemyState.Trace:
+                Trace();
+                break;
+            case EnemyState.Patrol:
+                Patrol();
+                break;
         }
     }
 
@@ -35,19 +62,59 @@ public class EnemyController : MonoBehaviour
 
     }
 
-    public virtual void SetTargetDir()
-    {
-        target = GameObject.FindWithTag("Player").transform;
-        isTracing = true;
-    }
-
     private void Trace()
     {
-        transform.position = Vector2.MoveTowards(transform.position, target.position, model.MoveSpd *  Time.deltaTime);
+        targetPos = new Vector2(player.transform.position.x, transform.position.y);
+        transform.position = Vector2.MoveTowards(transform.position, targetPos, model.MoveSpd *  Time.deltaTime);
     }
 
     public virtual void Patrol()
     {
+        if (changePatrolDirTimer <= 0f)
+        {
+            patrolDir = GetPatrolDir();
+            changePatrolDirTimer = Random.Range(1f, 2f);
+        }
 
+        if (changePatrolDirTimer > 0f)
+        {
+            changePatrolDirTimer -= Time.deltaTime;
+        }
+
+        Vector3 move = Vector3.zero;
+        switch (patrolDir)
+        {
+            case 0:
+                // 왼쪽으로 이동
+                move = Vector3.left;
+                break;
+            case 1:
+                // 정지
+                move = Vector3.zero;
+                break;
+            case 2:
+                // 오른쪽으로 이동
+                move = Vector3.right;
+                break;
+        }
+
+        transform.position += move * model.MoveSpd * Time.deltaTime;
     }
+
+    private int GetPatrolDir()
+    {
+        Debug.Log("새 순찰 방향 얻음");
+        int dir = Random.Range(0, 3);
+        return dir;
+    }
+}
+
+public enum EnemyState
+{
+    Idle,
+    Patrol,
+    Trace,
+    Attack,
+    Stunned,
+    Dead
 }
