@@ -8,10 +8,12 @@ public class EnemyController : MonoBehaviour
     protected EnemyModel model;
     protected EnemyView view;
 
+    // 상태 검사 관련 필드
     public bool isInAttackRange;
     public bool isInDetectRange;
     public EnemyState curState;
 
+    // 이동 관련 필드
     protected GameObject player;
     protected Vector2 targetPos;
     protected int patrolDir;
