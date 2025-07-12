@@ -17,6 +17,11 @@ public class PlayerController : MonoBehaviour
         view = GetComponent<PlayerView>();
         rb = GetComponent<Rigidbody2D>();
 
+        model.MaxHP = 5;
+        model.Attack = 1;
+        model.MoveSpd = 5;
+        model.JumpPower = 2;
+
         model.CurHP.Value = model.MaxHP;
     }
 
@@ -44,7 +49,7 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
-        Debug.Log("¡°«¡«‘");
+        Debug.Log("Ï†êÌîÑÌï®");
         rb.AddForce(Vector2.up * model.JumpPower * rb.gravityScale, ForceMode2D.Impulse); 
     }
 }

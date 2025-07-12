@@ -54,10 +54,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8591682944319403415}
-  - component: {fileID: 415513537171456556}
+  - component: {fileID: 119678794780187337}
   m_Layer: 0
   m_Name: Platform1_4
-  m_TagString: Untagged
+  m_TagString: Platform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -78,7 +78,7 @@ Transform:
   - {fileID: 7140611076806137352}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &415513537171456556
+--- !u!114 &119678794780187337
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -509,7 +509,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8023894396878691588}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0

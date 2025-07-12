@@ -10,7 +10,7 @@ public class TestEnemy : EnemyController
         model.MaxHP = 10;
         model.Attack = 1;
         model.MoveSpd = 2f;
-        model.AttackRange = 3f;
+        model.AttackRange = 1f;
         model.DetectRange = 5f;
         model.CurHP.Value = model.MaxHP;
     }

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +10,7 @@ public class PlatformManager : MonoBehaviour
     // 생성 시 이전 생성된 플랫폼보다 position.y의 값이 2보다 크면 안됨
     // 생성 시 이전 생성된 플랫폼에 몬스터가 있었다면 몬스터가 플랫폼 위에 있으면 안됨
     // 플랫폼 이동 속도는 시간에 따라 점점 빨라짐
+    [Header("자동생성 플랫폼")]
     [SerializeField] List<PooledObject> platforms = new List<PooledObject>();
     List<ObjectPool> platformPools = new List<ObjectPool>();
     private ObjectPool platform1Pool;
@@ -22,7 +23,8 @@ public class PlatformManager : MonoBehaviour
     [SerializeField] private float createTimer;
     [SerializeField] private float stageEndTimer;
     [SerializeField] private float platformSpd;
-    
+
+    private bool isSpawned;
     private float previousY = 0;
 
     private void Awake()
@@ -47,6 +49,7 @@ public class PlatformManager : MonoBehaviour
         createTimer = 3f;
         stageEndTimer = 300f;
         platformSpd = 3f;
+        isSpawned = false;
     }
 
     private void Update()
@@ -71,7 +74,20 @@ public class PlatformManager : MonoBehaviour
         {
             y = Random.Range(-4f, 1.5f);
         }
+
         platform.Launch(y, platformSpd);
+
+        MonsterSpawner spawner = platform.GetComponent<MonsterSpawner>();
+
+        if (spawner != null && !isSpawned)
+        {
+            spawner.SpawnEnemy();
+            isSpawned = true;
+        }
+        else if (spawner != null && isSpawned)
+        {
+            isSpawned = false;
+        }
     }
 
     public Platform GetPlatform(int index)
